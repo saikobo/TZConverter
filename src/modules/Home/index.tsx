@@ -2,6 +2,10 @@ import dayjs from 'dayjs';
 import React, {createRef, ReactElement, useState} from 'react';
 import {ScrollView, TextInput, Button, Text, View} from 'react-native';
 import Input from '../../components/Input';
+import {
+  getMillisecondsInUTC,
+  convertSecondsToMilliseconds,
+} from '../../utils/time-helper';
 import useTimeZone from './hooks/useTimeZone';
 import styles from './styles';
 
@@ -29,6 +33,7 @@ const Home = (): ReactElement => {
         returnKeyType="next"
         onSubmitEditing={focusNextInput}
         blurOnSubmit={false}
+        testID="latitude-input"
       />
       <Input
         reference={longRef}
@@ -36,16 +41,26 @@ const Home = (): ReactElement => {
         value={longitude}
         onChangeText={setLongitude}
         returnKeyType="done"
+        testID="longitude-input"
       />
       <Text style={styles.message}>{data?.message}</Text>
       {data?.status === 'OK' && (
         <View>
-          <Text>
-            Time in: {data.zoneName} is {dayjs(1654459424).format('HH:mm a')}
+          <Text testID="time-value">
+            Time in: {data.zoneName} is{' '}
+            {dayjs(
+              getMillisecondsInUTC() +
+                convertSecondsToMilliseconds(data.gmtOffset),
+            ).format('HH:mm a')}
           </Text>
         </View>
       )}
-      <Button disabled={loading} title="Get Time Zone" onPress={onSubmit} />
+      <Button
+        testID="submit-button"
+        disabled={loading}
+        title="Get Time Zone"
+        onPress={onSubmit}
+      />
     </ScrollView>
   );
 };
