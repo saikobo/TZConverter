@@ -11,7 +11,7 @@
 import React from 'react';
 import {SafeAreaView, StatusBar} from 'react-native';
 
-import Home from './modules/Home';
+import Home from './src/modules/Home';
 
 const App = () => {
   return (
